@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+    // good practice to have the functions separate
+    // hence its here and the event listener at the bottom
+    function playSound(e) {
+        // console.log(e.keyCode)
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        // I want to set up the listerner to work with each button
+        // hence the keyCode attribute of the event that it listens to
+        // plus it uses those `` backticks with ${} (seems like f-string in python)
+
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        // here I save the div on the page so I can change it later
+
+        if(!audio) return;  
+        // if audio is false, it returns nothing (prevents errors)
+        
+        audio.currentTime = 0;
+        // this sets each audio to start to avoid waiting between clicks
+
+        audio.play();
+        // simple method to play the audio tag/element
+
+        key.classList.add("playing");
+        // in jQuery it would be like key.addClass("playing")
+        // this changes the class
+    };
+
+    // to deal with putting back the original class, we create listner for transitions
+    const keys = document.querySelectorAll(".key");
+    
+    function removeTransition(e) {
+        if (e.propertyName !== "transform") return;
+        // skips all not being transform
+
+        // console.log(this);
+        // this returns the object that the function is used againts (in this case, its the key)
+        // and we just want to remove the CSS class we added previously
+        this.classList.remove("playing")
+    };
+    // function for below iteration
+
+    keys.forEach(key => key.addEventListener("transitionend", removeTransition));
+    // we need to add the listener to each element, not array of elements
+    // hence the forEach method (forEach(iterable => what_will_happen_to_the_iterable))
+    // the listener is listening to transition end
+
+    window.addEventListener("keydown", playSound);
+
+</script>
+
+
+</body>
+</html>
