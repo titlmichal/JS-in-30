@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+  <!-- with JS, CSS vars can be changed dynamically  -->
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <!-- btw data attributes, e.g. data-sizing, are usually custom for data handling, here its used as a suffix in CSS var change via JS -->
+     <!-- BCS then I call e.g. this.dataset in JS and it will return ever attribute starting "data-" -->
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://picsum.photos/800/500">
+
+  <style>
+    /* vars in CSS can be decleared on highest level - the root
+        to tell CSS its variable --> use the double dash*/
+    :root {
+        --base: #ffc600;
+        --spacing: 10px;
+        --blur: 10px;
+    }
+    /*here they are defined as default*/
+
+    img {
+        padding: var(--spacing);
+        background: var(--base);
+        filter: blur(var(--blur));
+    }
+    /*here its used*/
+    /*btw here its setting the vars to the img element*/
+
+    .h1 {
+        color: var(--base);
+    }
+    /*here its referencing the class, hence the dot at start*/
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+  </style>
+
+  <script>
+    const inputs = document.querySelectorAll(".controls input") // comb of 2 classes being selected: controls and input
+    // returns nodeList (not array) - nodeList has less methods (can be found in __proto__ properities)
+
+    function handleUpdate() {
+        // console.log(this.value);
+        // this references the object its called upon´
+        // BTW when tryin on my own first, i didnt use "this"
+        // which was the reason why it didnt work bcs
+        // it didnt have the reference to the slider
+
+        // console.log(this.dataset)
+        // to show how "data-" attributes can be called via JS
+
+        const suffix = this.dataset.sizing || ""; // in case there is not sizing/suffix
+
+        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        // btw I can set it to lower level div to change only selected elements
+
+        // takeaways here: CSS variables can be: set (in style), added to class (in style), 
+        // assigned to element of page (or whole page; via JS) and mainly changed by JS listening and attributes
+    }
+
+    inputs.forEach(input => input.addEventListener("change", handleUpdate))
+    inputs.forEach(input => input.addEventListener("mousemove", handleUpdate))
+    // mousemove happens with every hover, ok here, else might not be
+
+  </script>
+
+</body>
+</html>
