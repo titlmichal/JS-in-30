@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // Get your shorts on - this is an array workout!
+    // ## Array Cardio Day 1
+    // allegedly arrays can really help vwith JS skill + kinda gateway to func program.
+
+    // Some data we can work with
+
+    const inventors = [
+      { first: 'Albert', last: 'Einstein', year: 1879, passed: 1955 },
+      { first: 'Isaac', last: 'Newton', year: 1643, passed: 1727 },
+      { first: 'Galileo', last: 'Galilei', year: 1564, passed: 1642 },
+      { first: 'Marie', last: 'Curie', year: 1867, passed: 1934 },
+      { first: 'Johannes', last: 'Kepler', year: 1571, passed: 1630 },
+      { first: 'Nicolaus', last: 'Copernicus', year: 1473, passed: 1543 },
+      { first: 'Max', last: 'Planck', year: 1858, passed: 1947 },
+      { first: 'Katherine', last: 'Blodgett', year: 1898, passed: 1979 },
+      { first: 'Ada', last: 'Lovelace', year: 1815, passed: 1852 },
+      { first: 'Sarah E.', last: 'Goode', year: 1855, passed: 1905 },
+      { first: 'Lise', last: 'Meitner', year: 1878, passed: 1968 },
+      { first: 'Hanna', last: 'Hammarström', year: 1829, passed: 1909 }
+    ];
+    // inventor array
+
+    const people = [
+      'Bernhard, Sandra', 'Bethea, Erin', 'Becker, Carl', 'Bentsen, Lloyd', 'Beckett, Samuel', 'Blake, William', 'Berger, Ric', 'Beddoes, Mick', 'Beethoven, Ludwig',
+      'Belloc, Hilaire', 'Begin, Menachem', 'Bellow, Saul', 'Benchley, Robert', 'Blair, Robert', 'Benenson, Peter', 'Benjamin, Walter', 'Berlin, Irving',
+      'Benn, Tony', 'Benson, Leana', 'Bent, Silas', 'Berle, Milton', 'Berry, Halle', 'Biko, Steve', 'Beck, Glenn', 'Bergman, Ingmar', 'Black, Elk', 'Berio, Luciano',
+      'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
+      'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
+    ];
+    // people array
+    
+    // Array.prototype.filter()
+    // 1. Filter the list of inventors for those who were born in the 1500's
+    function is1500s(number) {
+        if (number > 1499 && number < 1600)
+            {return true};
+    }
+    const filteredInventors = inventors.filter((inventor) => is1500s(inventor["year"]))
+        // filter keeps only thos that the callback function returns true for
+        // hence the syntax array.filter(callbackFunction)
+    console.log(filteredInventors);
+
+    //alternative approach
+    //  the inventor => ... replaces the standard function(inventor) {...} approach
+    const fifteen = inventors.filter(inventor => inventor.year >= 1500 && inventor.year < 1600);
+    console.table(fifteen);
+
+    // Array.prototype.map()
+    // 2. Give us an array of the inventors first and last names
+    // map takes in an array and return each element with applied function
+    const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+    console.log(fullNames);
+
+    // Array.prototype.sort()
+    // 3. Sort the inventors by birthdate, oldest to youngest
+    const sortedInvetors = inventors.sort((a, b) => a["year"] - b["year"]);
+        // syntax like array.sort(sortingFunction)
+        // sort always takes one and next item of element (a and b) and 
+        // sorts them by whether the result is -1 or 1 or 0
+        // can do string comparisons too, but be careful about lower/uppercase
+        // default sorting as ascending, hence only const sortedInvetors = inventors.sort() would work here
+
+    const sortedInvetorsAlt = inventors.sort((a, b) => a.year > b.year ? 1 : -1);
+        // JS has this quick if then called turnarary
+        // it goes like: boolToEvaluate ? ifTrueResult : ifFalseResult    
+    
+    console.table(sortedInvetors);
+    console.table(sortedInvetorsAlt);
+
+    // Array.prototype.reduce()
+    // 4. How many years did all the inventors live all together?
+    const initialValue = 0;
+    const sumAges = inventors.reduce(
+        // (runningSum, inventor) => runningSum + (inventor["passed"] - inventor["year"]),
+        (runningSum, inventor) => runningSum + (inventor.passed - inventor.year),
+        // btw I can reference the key-value as an attribute in JS (but Python-way works here too)
+        initialValue
+    );
+        // again, reduce uses callback function which needs accumulator (where the values are store
+        // or sum of previous operations) and currentValue (whats added in this run)
+        // here its runningSum as accumulator and the inventors age as currentValue
+        // initialValue is set optionally, otherwise its the value of first array element
+    console.log(sumAges);
+
+    // 5. Sort the inventors by years lived
+    const yearsSortInventors = inventors.sort((a, b) => (a.passed - a.year) - (b.passed - b.year))
+    console.log(yearsSortInventors)
+        // kinda easy - same logic as sort by birth year
+
+    // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    // ... (done in console on the page: standard select of elements --> getting text via map --> filtering if includes)
+
+    // 7. sort Exercise
+    // Sort the people alphabetically by last name
+    // console.log(people.sort((a, b) => a.split(", ")[0].localeCompare(b.split(", ")[0])))
+    function sortByLast(a, b) {
+        var lastNameOne = a.split(", ")[0];
+        var lastNameTwo = b.split(", ")[0]; 
+        if (lastNameOne > lastNameTwo)
+            return -1;
+        if (lastNameOne < lastNameTwo)
+            return 1;
+        return 0;
+    }
+    console.log(people.sort((a, b) => sortByLast(a, b)));
+    // console.log(people.sort((a, b) => a.split(", ")[0] < b.split(", ")[0]));
+    // all options seem kinda valid, though the 2nd lookis best (most transparent)
+
+    // 8. Reduce Exercise
+    // Sum up the instances of each of these
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const dataSet = new Set(data);
+        // getting array/set of unique words
+
+    function isWord(word, wantedWord) {
+        var result = 0
+        if (word == wantedWord) {result = 1}
+        else (result = 0);
+        return result;
+    }
+        // function to check whether given word is the word to be counted
+
+    function countWordApp(data, wantedWord) {
+        const startValue = 0;
+        const countWordApp = data.reduce(
+            (runningCount, word) => runningCount + isWord(word, wantedWord),
+            startValue,
+        )
+        return countWordApp;
+    }
+        // function going through data and counting appearance of word to be counted
+
+    dataSet.forEach(word => console.log(word + ": " + countWordApp(data, word)));
+    //  function of counting appearance in arra is used on each set element
+    // ...yay, I made that on my own (like most of the rest but this is cooler)
+
+  </script>
+</body>
+</html>
