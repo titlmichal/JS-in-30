@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flex Panels 💪</title>
+  <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <style>
+    /* this day doesnt lean so much on JS, but CSS quite a lot too 
+    goal is to make flex gallery: each image size moves depending on the user*/
+    /*btw flexbox is a big topic on its own --> maybe good to check out*/
+    html {
+      box-sizing: border-box;
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-size: 20px;
+      font-weight: 200;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    .panels {
+      min-height: 100vh;
+      overflow: hidden;
+      /*we need to make the panels next to each ohter*/
+      display: flex;
+    }
+
+    .panel {
+      background: #6B0F9C;
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      align-items: center;
+      /* Safari transitionend event.propertyName === flex */
+      /* Chrome + FF transitionend event.propertyName === flex-grow */
+      transition:
+        font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        background 0.2s;
+        /*this makes every panel and its child transition nicely*/
+      font-size: 20px;
+      background-size: cover;
+      background-position: center;
+      /*this makes the panels to distribute ALL the available space the same for each*/
+      flex: 1;
+      /*these whole 3 attributes below make the contents of the panel
+      go in the center*/
+      /*btw flex container here: panels
+      flex items: panel
+      but we want to make panel a flex container too
+      (bcs element in CSS can be flex item and container at the same time*/
+      justify-content: center;
+      align-items: center;
+      display: flex; /*here we make the panel flex container --> nesting flexbox*/
+      /*default behaviour of flexbox is left-right --> we need the flex-direction*/
+      flex-direction: column; /*centers in column, instead of default row*/
+    }
+
+    .panel1 { background-image:url(https://picsum.photos/1500/1500); }
+    .panel2 { background-image:url(https://picsum.photos/1500/1500); }
+    .panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
+    .panel4 { background-image:url(https://picsum.photos/1500/1500); }
+    .panel5 { background-image:url(https://picsum.photos/1500/1500); }
+
+    /* Flex Children/items */
+    .panel > * {
+      margin: 0;
+      width: 100%;
+      transition: transform 0.5s;
+      /*just to see how the flex childrens (child elements of the flexbox, panel in this case) are there*/
+      /* border: 1px solid red; */
+      flex: 1 0 auto;
+      /*here we split the space of container/flexbox to same size areas for each child/flex item*/
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      /*with these 3 above, we do the same centering in each childs space (as above in the panel parent
+      (where the panel parent is a child of panels btw)*/
+    }
+
+    /*idea below, when the moving of outta the screen is disabled
+    the return to screen is animated - transitioned (see the transition setup in .panel class)
+    --> that will be done by assigning the class .open-active*/
+    .panel > *:first-child {transform: translateY(-100%);}
+    .panel.open-active > *:first-child {transform: translateY(0);}
+    /*moving off the screen the fist child*/
+    .panel > *:last-child {transform: translateY(100%);}
+    .panel.open-active > *:last-child {transform: translateY(0);}
+    /*moving of the screen the last child*/
+
+    .panel p {
+      text-transform: uppercase;
+      font-family: 'Amatic SC', cursive;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
+      font-size: 2em;
+    }
+
+    .panel p:nth-child(2) {
+      font-size: 4em;
+    }
+
+    .panel.open {
+      font-size: 40px;
+      flex: 5;
+      /*originally we set the flex size to 1 for each panel
+      but here we tell that when this has .open class, it should take
+      5x times the space of the rest*/
+    }
+
+  </style>
+
+
+  <div class="panels">
+    <div class="panel panel1">
+      <p>Hey</p>
+      <p>Let's</p>
+      <p>Dance</p>
+    </div>
+    <div class="panel panel2">
+      <p>Give</p>
+      <p>Take</p>
+      <p>Receive</p>
+    </div>
+    <div class="panel panel3">
+      <p>Experience</p>
+      <p>It</p>
+      <p>Today</p>
+    </div>
+    <div class="panel panel4">
+      <p>Give</p>
+      <p>All</p>
+      <p>You can</p>
+    </div>
+    <div class="panel panel5">
+      <p>Life</p>
+      <p>In</p>
+      <p>Motion</p>
+    </div>
+  </div>
+
+  <script>
+    const panels = document.querySelectorAll(".panel") // everything with .panel class
+
+    function toggleOpen() {
+        this.classList.toggle("open");
+    }
+        // a function that toggles open on the object its called upon
+        // toggle seems to add (the class in this case bcs is toggling upon classList) (if its NOT there) 
+        // and remove it if it IS there
+
+    panels.forEach(panel => panel.addEventListener("click", toggleOpen));
+        // adding eventlistener for a click for each panel
+        // so then it would be toggled open
+        // BTW the toggleOpen is w/o the () bcs with them, it would run on page load, not the click
+
+    // now the flex change is implemented, but what about the 1st and last child transition?
+    // more transition ends will be here --> how to deal with them?
+    function toggleActive(event) {
+        // console.log(event.propertyName); // what transitioned during the transitioned that just ended
+        if (event.propertyName.includes("flex")) { // only includes flex bcs safari calls it flex, but other flex-grow
+            this.classList.toggle("open-active");
+        }
+    }
+
+    panels.forEach(panel => panel.addEventListener("transitionend", toggleActive));
+
+    // in practice: panel is clicked, click listener fires and calls toggleOpen
+    // adds .open class which changes the flex which means a transition
+    // which makes a 2nd listner fire on transition end and call toggleActive
+    // which adds .open-active class to the panel
+    // (i mean: adds or removes --> toggles or ditoggles)
+
+    // btw the nice thing about using flex here is that it distributes the space depending
+    // on the "flex unit" (e.g. when 3 panels in the middle are clicked, the ratios of space 
+    // is distributed like: 1-5-5-1)
+
+  </script>
+
+</body>
+</html>
