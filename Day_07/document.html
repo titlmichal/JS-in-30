@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪💪</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // ## Array Cardio Day 2
+    // doing first on my own - checking when done
+
+    const people = [
+      { name: 'Wes', year: 1988 },
+      { name: 'Kait', year: 1986 },
+      { name: 'Irv', year: 1970 },
+      { name: 'Lux', year: 2015 }
+    ];
+
+    const comments = [
+      { text: 'Love this!', id: 523423 },
+      { text: 'Super good', id: 823423 },
+      { text: 'You are the best', id: 2039842 },
+      { text: 'Ramen is my fav food ever', id: 123523 },
+      { text: 'Nice Nice Nice!', id: 542328 }
+    ];
+
+    // Some and Every Checks
+    // Array.prototype.some() // is at least one person 19 or older?
+        // .some() tests whether at least one item of array passes the test (implemented via the funcion)
+    const date = new Date();
+    let year = date.getFullYear();
+
+    // function is19plus(person) {
+    //     const date = new Date();
+    //     let year = date.getFullYear();
+    //     return (year - person.year) >= 19;
+    // }
+    // people.forEach(person => console.log(is19plus(person))); // the long way
+    console.log(people.some(person => (year - person.year) >= 19)); //the short way via .some
+    // Array.prototype.every() // is everyone 19 or older?
+        // same as .some but checks for all
+    console.log(people.every(person => (year - person.year) >= 19));
+
+    // Array.prototype.find()
+    // Find is like filter, but instead returns just the one you are looking for
+    // find the comment with the ID of 823423
+        // similar like .some or .every
+        // but returns the first element that satisfies the function
+    console.log(comments.find(comment => comment.id == 823423))
+
+    // Array.prototype.findIndex()
+    // Find the comment with this ID
+    // delete the comment with the ID of 823423
+        // findIndex returns the index of the first occurence satisfyin the test function
+        // e.g. same logic as above, just different
+    comments.splice(comments.findIndex(comment => comment.id == 823423), 1);
+    console.log(comments);
+
+  </script>
+</body>
+</html>
