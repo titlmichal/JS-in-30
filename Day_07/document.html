@@ -56,7 +56,8 @@
         // findIndex returns the index of the first occurence satisfyin the test function
         // e.g. same logic as above, just different
     comments.splice(comments.findIndex(comment => comment.id == 823423), 1);
-    console.log(comments);
+        // 1st arg = start index of deletion, 2nd arg = number of deletions to be done
+    console.table(comments);
 
   </script>
 </body>
