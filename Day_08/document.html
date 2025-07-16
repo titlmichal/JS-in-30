@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+<canvas id="draw" width="800" height="800">
+</canvas>
+
+<script>
+
+    const canvas = document.querySelector("#draw");  // selecting by id, hence the #
+    // canvas is like ms paint in browser, but you dont paint
+    // in the browser directly but within the context = block of pixels for painting
+    // (can be 2D or 3D)
+    const ctx = canvas.getContext("2d");
+    // default canvas is 800x800 but can be changed
+    // we want it to the full size of the window used
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // then we need few other settigns
+    ctx.strokeStyle = "#BADA55"; // base colour
+    ctx.lineJoin = "round";         
+    ctx.lineCap = "round";       // how are lines joined and ended
+    ctx.lineWidth = 10;
+    // then few dummy vars
+    let isDrawing = false; // to tell to draw when clicked down or not
+    let lastX = 0;
+    let lastY = 0;  // where the line ends (bcs line will know start but not end)
+    let hue = 0;
+    let direction = true; // true = the number is building up
+    // then drawing function right
+    // mouse events have coordinates and other interesting stuff
+    function draw(e) {
+        // but we want to draw only when is clicked
+        if(!isDrawing) return; // this will stop the fun when negative of isDrawing is true (isDrawing = false)
+        console.log(e);
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`  // setting the style/colour to hsl via hue var
+        // ctx is context --> there we do the painting
+        // this everything starts our line
+        ctx.beginPath();
+        // go from:
+        ctx.moveTo(lastX, lastY);
+        // go to:
+        ctx.lineTo(e.offsetX, e.offsetY);   // this is coming from the event
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY]; // bit of ES6 trick
+        // adding the hue so it changes
+        // btw hue can go around and around so 720 is same red as 360
+        // so no need to reset like this
+        if(hue == 360) {
+            hue = 0;
+        }
+        hue++;
+        
+        // can increment the line widt but dont want infinity
+        // hence if its to big or low we switch the direction
+        // and accordingly lower the width (or increment it)
+        if(ctx.lineWidth >= 100) {
+            direction = false;
+        }
+        if(ctx.lineWidth <= 1) {
+            direction = true;   // btw they did in one if combining with or and using negative of current value
+        }
+        if(direction) {
+            ctx.lineWidth++;
+        } else {
+            ctx.lineWidth--;
+        }
+    }
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        // we need to account for the always starting at 0,0 and connecting to previously ended line
+        // mousedown happens before mouse up, hence here the update of start line
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    canvas.addEventListener("mouseup", () => isDrawing = false);
+    // in case someone leaves the canvas with mouse down it wont register mouse up outside the canvas
+    canvas.addEventListener("mouseout", () => isDrawing = false);
+    
+    // colours can use hsl spectrum: https://mothereffinghsl.com/
+    // 1st nr: 0-360 is from red to red, 2nd nur = saturation/light (100 = white), 3nr = alpha (100 = black)
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
