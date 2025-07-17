@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+  <!-- this inline function call, eventListener would work too -->
+
+  <script>
+    // TODAY: 14 must know dev tools tricks
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+    // wanna see what JS is run when clicked on element?
+    // right click on the element in DOM --> break on -- attribute modifications
+    // = will call debugger and show the script lines affecting it in the sources
+    // and pause through each steps (like in any other debugging mode)
+
+    // Regular
+    console.log("helo");
+
+    // Interpolated
+    console.log("Hello Im a %s string", "random");
+    // the %s works the same as:
+    let randomWord = "random";
+    console.log(`Hello Im a ${randomWord} string`)
+
+    // Styled
+    console.log("%cI am a great text", 
+    "font-size: 50px; background: red; text-shadow: 10px 10px");
+    // so we %c at the beginning of the string and CSS styling as 2nd arg
+
+    // warning!
+    console.warn("DANGER");
+    // will provide a link to where the warning was called
+
+    // Error :|
+    console.error("error happened");
+    // similar as above, could be used in function
+
+    // Info
+    console.info("helo this is info but 4 some reason doesnt look like it :(");
+
+    // Testing
+    console.assert(1 == 1, "This is incorrect!");           // will not throw error bcs its assert is correct
+    console.assert(1 == 2, "This is actually incorrect!");  // will throw
+
+    let wantedClass = "woohoo";
+    const p = document.querySelector("p");
+    console.assert(p.classList.contains(wantedClass), `Elements class isnt ${wantedClass}`);
+
+    // clearing
+    // can mess with devs and put it at the end of JS script
+    console.clear();
+
+    // Viewing DOM Elements
+    console.log(p); // the actual element
+    console.dir(p); // allow the check the details of the element (properities, methods, ...)
+
+    // Grouping together
+    // basically allows to make a bit more organized
+    // can do groupCollapsed to close the dropdowns
+    dogs.forEach(dog => {
+        console.group(`This is ${dog.name}`);
+        console.log(`This is ${dog.name}`);
+        console.log(`${dog.name}s age is ${dog.age}`);
+        console.groupEnd(`This is ${dog.name}`);
+    })
+
+    // counting
+    // basically how many times a thing was used
+    // e.g. how many times was iterated over it
+    console.count("me");
+    console.count("me");
+    console.count("you");
+    console.count("me");
+    console.count(p);
+    console.count(p);
+    console.count(p);
+    dogs.forEach(dog => console.count(dog));
+
+    // timing
+    console.time("fetchin data - time starts");
+    fetch("https://api.coindesk.com/v1/bpi/currentprice.json")
+    .then(data => data.json())
+    .then(data => {console.timeEnd("fetchin data - time starts")}); // has to have the same string
+    console.log(data);
+
+    // table
+    console.table(dogs)     // works for arrays with same amount of properities
+
+  </script>
+</body>
+</html>
