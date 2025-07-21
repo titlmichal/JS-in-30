@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script type="text/javascript" src="./cornify.js"></script>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <script>
+        // konami code this time: basically implementing cheats
+        // in practice: checking the sequences of inputted keys and doing stuff based on that
+        const pressed = [];
+        const secretCode = "miata";
+
+        window.addEventListener("keyup", (e) => {
+            pressed.push(e.key);
+            pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+            // need to start from back --> when the start is negative...
+            // ... it seems like even the removing goes backwards
+            if(pressed.join("") == secretCode) {
+                console.log("It is indeed always the answer!");
+            };
+        })
+    </script>
+  </body>
+</html>
