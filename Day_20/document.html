@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <div class="words" contenteditable>
+  </div>
+
+<script>
+    // how to recognize speech in browser
+    // speechRecognition global variable lives in browser in window
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;    //first is firefox, second is chrome
+
+    const recognition = new SpeechRecognition();    // start new recognition
+    recognition.interimResults = true;              // to receive results when speaking, not only after stopping
+    // we want to stack senteces by paragraphs after stopping the talk
+    let p = document.createElement("p");
+    const words = document.querySelector(".words");
+    words.appendChild(p);
+
+    recognition.addEventListener("result", e => {
+        console.log(e.results); // e.results is list; stores the transcript, confidence level and whether the speech is done
+        const transcript = Array.from(e.results)
+            // its quite nested, hence the map multiple times
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join("");  // addint the results together if there is more
+
+            p.textContent = transcript;
+            // to avoid overwritting what we said
+            if(e.results[0].isFinal) {
+                p = document.createElement("p");
+                words.appendChild(p);
+            }
+        
+        console.log(transcript)
+    });
+
+    // if stop talking, the result is done and no more event is triggered --> new for end
+    // (when the speech ends, run the recognition)
+    // here is an error not encountered by the instructor (likely bcs results can be zero, says stackoverflow)
+    recognition.addEventListener("end", recognition.start);
+
+    // starting the recognition
+    recognition.start();
+
+</script>
+
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+
+    body {
+      background: #ffc600;
+      font-family: 'helvetica neue';
+      font-weight: 200;
+      font-size: 20px;
+    }
+
+    .words {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+      padding: 1rem 2rem 1rem 5rem;
+      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height: 3rem;
+    }
+
+    p {
+      margin: 0 0 3rem;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+      border: 1px solid;
+      border-color: transparent #efe4e4;
+    }
+  </style>
+
+</body>
+</html>
